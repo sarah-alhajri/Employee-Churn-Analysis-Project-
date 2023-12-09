@@ -6,9 +6,10 @@ import numpy as np
 from PIL import Image
 from streamlit_card import card # https://github.com/gamcoh/st-card
 import base64
+import time
 
 
-
+st.set_page_config(page_title='EmployeesChurnPrediction', page_icon= "👨🏻‍💻")
 # Title/Text
 st.title("Employees Churn Prediction")
 st.text("Stay or Left? Anticipating Employee Churn using Predictive Analytics")
@@ -103,11 +104,19 @@ df = pd.DataFrame.from_dict([my_dict])
 
 
 # Prediction with user inputs
-predict = st.button("Predict")
-result = model.predict(df)
-str1 = "The employee will leave the company"
-if result == 0:
-    str1 = "The employee will stay"
-if predict :
-    st.text('Prediction is: ')
-    st.info(str1)
+if st.button('Predict'):
+    st.button("Reset", type="primary")
+
+
+    # Call the prediction function
+    result = model.predict(df)
+
+    # Display result based on the prediction
+    if result == 1:
+        st.warning('The employee will leave', icon="⚠️")
+    elif result == 0:
+        st.success('The employee will stay', icon="✅")
+    else:
+        # Add an error message for unexpected values
+        st.error('Invalid result value')
+
